@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme {
+  /* 브랜드 컬러 */
+  --color-primary: #7969e6; /* 포인트, 아이콘, 테두리 */
+  --color-primary-strong: #6655d6; /* 흰 글자 버튼 배경 (명도 대비 4.5:1 이상) */
+  --color-primary-deep: #4f3fc0; /* 연보라 배경 위 글자 */
+  --color-primary-light: #f0edff;
+  --color-canvas: #fafaf8;
+  --color-surface: #ffffff;
+  --color-ink: #222222;
+  --color-muted: #6b6b6b; /* 기획서 #777보다 살짝 진하게: 배경 대비 4.5:1 확보 */
+  --color-line: #eeeeee;
+  --color-yellow: #ffd978;
+  --color-peach: #ffddd2;
+
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo",
+    "Noto Sans KR", "Malgun Gothic", sans-serif;
+
+  --radius-card: 1.25rem;
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.03), 0 8px 24px rgb(34 34 34 / 0.06);
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    word-break: keep-all;
+  }
+
+  body {
+    @apply bg-canvas text-ink antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary-strong);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-card border border-line bg-surface shadow-soft;
+  }
+
+  .eyebrow {
+    @apply text-sm font-semibold text-primary-deep;
+  }
+
+  .btn-primary {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-primary-strong px-5 text-[15px] font-semibold text-white transition hover:bg-primary-deep active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-primary-light px-5 text-[15px] font-semibold text-primary-deep transition hover:bg-[#e6e1ff] active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-line bg-surface px-5 text-[15px] font-semibold text-ink transition hover:bg-canvas active:scale-[0.98];
+  }
+
+  .chip {
+    @apply inline-flex min-h-10 items-center rounded-full border border-line bg-surface px-4 text-sm font-medium text-ink transition hover:border-primary/60 aria-pressed:border-primary-strong aria-pressed:bg-primary-strong aria-pressed:text-white;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
