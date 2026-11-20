@@ -15,7 +15,7 @@ import type { Festival } from "./festivals";
 
 const REGION_ORDER = [
   "서울", "인천", "경기", "강원", "대전", "세종", "충북", "충남",
-  "광주", "전북", "전남", "부산", "대구", "울산", "경북", "경남", "제주", "기타",
+  "광주", "전북", "전남", "전남광주", "부산", "대구", "울산", "경북", "경남", "제주", "기타",
 ];
 const NEAR = "내 주변";
 const PAGE = 12;
@@ -72,7 +72,10 @@ export function FestivalBoard({ today, festivals, ok }: Props) {
 
   const regions = useMemo(() => {
     const present = new Set(festivals.map((f) => f.region));
-    return REGION_ORDER.filter((r) => present.has(r));
+    // 목록에 없는 새 지역 이름(통합 시·도 등)도 "기타" 앞에 붙여 보여줍니다.
+    const extra = [...present].filter((r) => !REGION_ORDER.includes(r)).sort();
+    const known = REGION_ORDER.filter((r) => present.has(r) && r !== "기타");
+    return [...known, ...extra, ...(present.has("기타") ? ["기타"] : [])];
   }, [festivals]);
 
   const list = useMemo(() => {

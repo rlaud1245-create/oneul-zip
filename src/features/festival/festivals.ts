@@ -75,6 +75,13 @@ const REGION_OF: Record<string, string> = {
   제주: "제주",
 };
 
+/** "전남광주통합특별시"처럼 새로 합쳐진 시·도는 "통합특별시"를 떼고 그대로 씁니다. */
+function regionOf(first: string): string {
+  if (REGION_OF[first]) return REGION_OF[first];
+  const merged = first.match(/^(.+)통합특별시$/);
+  return merged ? merged[1] : "기타";
+}
+
 function toDateKey(yyyymmdd: unknown): string | null {
   const s = String(yyyymmdd ?? "");
   return /^\d{8}$/.test(s) ? `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}` : null;
@@ -117,7 +124,7 @@ function normalize(item: RawItem): Festival | null {
   return {
     id: String(item.contentid ?? title),
     title,
-    region: REGION_OF[first] ?? "기타",
+    region: regionOf(first),
     address,
     start,
     end,
@@ -181,7 +188,7 @@ async function loadFromApi(today: string): Promise<FestivalResult> {
 const memory = new Map<string, { at: number; value: FestivalResult }>();
 
 export async function festivalsFor(today: string): Promise<FestivalResult> {
-  const cacheKey = `https://cache.oneulzip.com/festivals/v2/${today}`;
+  const cacheKey = `https://cache.oneulzip.com/festivals/v3/${today}`;
   const hit = memory.get(cacheKey);
   if (hit && Date.now() - hit.at < CACHE_SECONDS * 1000) return hit.value;
 
