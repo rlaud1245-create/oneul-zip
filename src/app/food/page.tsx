@@ -20,13 +20,17 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   const food = typeof id === "string" ? findFood(id) : undefined;
   const ogTitle = food ? `오늘 메뉴는 ${food.name} ${food.emoji} 어때요?` : TITLE;
   const ogDescription = food ? food.reason : DESCRIPTION;
+  // 메뉴를 공유하면 그 메뉴 그림이 들어간 미리보기(public/og/food/{id}.jpg)를 보여줍니다.
+  const ogImage = food
+    ? { url: `/og/food/${food.id}.jpg`, width: 1200, height: 630, alt: `오늘은 ${food.name} 드세요` }
+    : "/food/opengraph-image.png";
 
   return {
     title: TITLE,
     description: DESCRIPTION,
     alternates: { canonical: "/food" },
-    openGraph: { images: ["/food/opengraph-image.png"], title: ogTitle, description: ogDescription, url: food ? `/food?id=${food.id}` : "/food" },
-    twitter: { card: "summary_large_image", images: ["/food/twitter-image.png"], title: ogTitle, description: ogDescription },
+    openGraph: { images: [ogImage], title: ogTitle, description: ogDescription, url: food ? `/food?id=${food.id}` : "/food" },
+    twitter: { card: "summary_large_image", images: [food ? ogImage : "/food/twitter-image.png"], title: ogTitle, description: ogDescription },
   };
 }
 
