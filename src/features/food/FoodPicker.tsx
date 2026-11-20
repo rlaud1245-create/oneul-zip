@@ -16,6 +16,7 @@ import type { Condition } from "@/lib/recommend";
 import { scrollToResult } from "@/lib/scroll";
 import { STORAGE_KEYS } from "@/lib/storage";
 import type { Companion, Food, FoodCategory, PriceRange } from "@/types";
+import { foodImage } from "@/data/foodImages";
 import { ServePlate, serveDuration } from "./ServePlate";
 
 type FoodFilters = {
@@ -201,7 +202,7 @@ export function FoodPicker({ initialId }: { initialId?: string }) {
       <div ref={resultRef} aria-live="polite" className="scroll-mt-20">
         {r.status === "result" && food ? (
           <div key={`${food.id}-${r.round}`}>
-          <ServePlate emoji={food.emoji} name={food.name} serve={serve} />
+          <ServePlate emoji={food.emoji} name={food.name} image={foodImage(food.id)} serve={serve} />
           <motion.article
             initial={{ opacity: 0, y: 8, rotate: 0 }}
             animate={{ opacity: 1, y: 0, rotate: -1 }}

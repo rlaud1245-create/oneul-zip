@@ -5,6 +5,8 @@ import { motion, useReducedMotion } from "motion/react";
 interface Props {
   emoji: string;
   name: string;
+  /** 메뉴 그림(그릇까지 그려진 투명 배경 그림). 없으면 이모지 + 기본 접시 */
+  image?: string;
   /**
    * 주방장 손 연출
    * - "full": 손이 접시를 들고 들어와 내려놓고 빠짐 (처음 주방장 맘대로)
@@ -23,7 +25,7 @@ export function serveDuration(serve: Props["serve"]) {
  * 사장님 추천 위에 놓이는 접시
  * 오른쪽에서 주방장 손이 접시를 들고 들어와 탁 내려놓고 다시 빠집니다.
  */
-export function ServePlate({ emoji, name, serve }: Props) {
+export function ServePlate({ emoji, name, image, serve }: Props) {
   const reduce = useReducedMotion();
   const total = reduce ? 0 : serveDuration(serve);
   const animated = total > 0;
@@ -31,7 +33,7 @@ export function ServePlate({ emoji, name, serve }: Props) {
   const land = 0.45;
 
   return (
-    <div className="relative -mx-5 h-[150px] overflow-hidden px-5" aria-hidden>
+    <div className={`relative -mx-5 overflow-hidden px-5 ${image ? "h-[200px]" : "h-[150px]"}`} aria-hidden>
       {/* 김 */}
       <motion.div
         className="absolute left-1/2 top-1 flex -translate-x-1/2 gap-3"
@@ -46,7 +48,7 @@ export function ServePlate({ emoji, name, serve }: Props) {
         ))}
       </motion.div>
 
-      <div className="absolute bottom-[22px] left-1/2 w-[188px] -translate-x-1/2">
+      <div className={`absolute bottom-[22px] left-1/2 -translate-x-1/2 ${image ? "w-[200px]" : "w-[188px]"}`}>
         {/* 접시 */}
         <motion.div
           className="relative z-10"
@@ -63,14 +65,28 @@ export function ServePlate({ emoji, name, serve }: Props) {
               : undefined
           }
         >
-          <svg viewBox="0 0 188 56" className="block w-full">
-            <ellipse cx="94" cy="32" rx="90" ry="22" fill="#2B1D14" />
-            <ellipse cx="94" cy="28" rx="90" ry="22" fill="#FFF8E6" stroke="#2B1D14" strokeWidth="3" />
-            <ellipse cx="94" cy="27" rx="62" ry="13" fill="none" stroke="#C9B48E" strokeWidth="2.5" />
-          </svg>
-          <span className="absolute inset-x-0 -top-[52px] text-center text-[60px] leading-none drop-shadow-[2px_3px_0_rgb(43_29_20/0.2)]">
-            {emoji}
-          </span>
+          {image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={image}
+              alt=""
+              width={480}
+              height={400}
+              decoding="async"
+              className="block h-auto w-full drop-shadow-[2px_4px_0_rgb(43_29_20/0.25)]"
+            />
+          ) : (
+            <>
+              <svg viewBox="0 0 188 56" className="block w-full">
+                <ellipse cx="94" cy="32" rx="90" ry="22" fill="#2B1D14" />
+                <ellipse cx="94" cy="28" rx="90" ry="22" fill="#FFF8E6" stroke="#2B1D14" strokeWidth="3" />
+                <ellipse cx="94" cy="27" rx="62" ry="13" fill="none" stroke="#C9B48E" strokeWidth="2.5" />
+              </svg>
+              <span className="absolute inset-x-0 -top-[52px] text-center text-[60px] leading-none drop-shadow-[2px_3px_0_rgb(43_29_20/0.2)]">
+                {emoji}
+              </span>
+            </>
+          )}
           {/* 이름표 */}
           <span className="absolute -bottom-1 left-0 -rotate-6 rounded-[3px] border-2 border-ink bg-sign px-2 font-label text-[14px] leading-6 text-ink">
             {name}
@@ -81,7 +97,7 @@ export function ServePlate({ emoji, name, serve }: Props) {
         {animated && (
           <motion.svg
             viewBox="0 0 240 70"
-            className="absolute -right-[150px] bottom-[-30px] z-0 w-[240px]"
+            className={`absolute -right-[150px] z-0 w-[240px] ${image ? "bottom-[-14px]" : "bottom-[-30px]"}`}
             initial={{ x: 340 }}
             animate={{ x: [340, 0, 0, 420] }}
             transition={{ duration: total, times: [0, land, land + 0.15, 1], ease: ["easeOut", "linear", "easeIn"] }}
