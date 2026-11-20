@@ -92,6 +92,19 @@
   --shop-paper: #efe3c8;
 }
 
+/* 오늘의 축제: 오늘.zip 동네 게시판 (코르크 게시판) */
+[data-shop="festival"] {
+  --shop-on-sign: #2b1d14;
+  --shop-sign-title: #2b1d14;
+  --shop-accent: #e8964f;
+  --shop-strong: #e8964f;
+  --shop-deep: #2f5a2a;
+  --shop-light: #d6e9cf;
+  --shop-on-strong: #2b1d14;
+  --shop-sign: #8db580;
+  --shop-paper: #eee3c6;
+}
+
 /* 오늘의 선택: 오늘.zip 문방구 (뽑기판) */
 [data-shop="stationery"] {
   --shop-on-sign: #2b1d14;

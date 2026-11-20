@@ -60,6 +60,14 @@ export default function HomePage() {
       pick: luckyZodiacs(today).length ? `오늘 대길: ${luckyZodiacs(today).join(", ")}띠` : "띠별 부적 12장",
       note: "무슨 띠세요? 오늘의 부적을 받아가세요.",
     },
+    {
+      theme: "festival" as const,
+      href: "/festival",
+      pickHref: "/festival",
+      label: "오늘 붙은 전단지",
+      pick: "지금 열리는 전국 축제",
+      note: "지역을 고르거나 내 주변을 눌러 가까운 축제를 찾아보세요.",
+    },
   ];
 
   return (

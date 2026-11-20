@@ -25,6 +25,7 @@ export function ShopCrossLinks({ current }: { current: ShopTheme }) {
       title: lucky.length ? `오늘 대길: ${lucky.join(", ")}띠` : "띠별 오늘의 부적",
       href: "/fortune",
     },
+    { theme: "festival", label: "오늘의 축제", title: "오늘 열린 동네 축제", href: "/festival" },
   ].filter((l) => l.theme !== current);
 
   return (
