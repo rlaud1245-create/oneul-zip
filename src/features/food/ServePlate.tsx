@@ -1,12 +1,13 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
+import type { FoodImage } from "@/data/foodImages";
 
 interface Props {
   emoji: string;
   name: string;
   /** 메뉴 그림(그릇까지 그려진 투명 배경 그림). 없으면 이모지 + 기본 접시 */
-  image?: string;
+  image?: FoodImage;
   /**
    * 주방장 손 연출
    * - "full": 손이 접시를 들고 들어와 내려놓고 빠짐 (처음 주방장 맘대로)
@@ -32,6 +33,11 @@ export function ServePlate({ emoji, name, image, serve }: Props) {
   // 손과 접시가 함께 들어오는 시간 비율
   const land = 0.45;
 
+  // 그림 크기를 미리 계산해서 자리를 고정합니다. (그림이 늦게 떠도 손과 접시가 흔들리지 않게)
+  const scale = image ? Math.min(220 / image.width, 180 / image.height, 1) : 1;
+  const dishW = image ? Math.round(image.width * scale) : 188;
+  const dishH = image ? Math.round(image.height * scale) : 56;
+
   return (
     <div
       className={`relative -mx-5 overflow-x-clip px-5 ${image ? "pt-6" : "pt-16"} ${animated ? "pb-[50px]" : "pb-[22px]"}`}
@@ -51,7 +57,7 @@ export function ServePlate({ emoji, name, image, serve }: Props) {
         ))}
       </motion.div>
 
-      <div className={`relative mx-auto ${image ? "w-fit max-w-[220px]" : "w-[188px]"}`}>
+      <div className="relative mx-auto" style={{ width: dishW }}>
         {/* 접시 */}
         <motion.div
           className="relative z-10"
@@ -71,12 +77,14 @@ export function ServePlate({ emoji, name, image, serve }: Props) {
           {image ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={image}
+              src={image.src}
               alt=""
-              width={480}
-              height={400}
+              width={image.width}
+              height={image.height}
               decoding="async"
-              className="block h-auto max-h-[180px] w-auto max-w-full drop-shadow-[2px_4px_0_rgb(43_29_20/0.25)]"
+              fetchPriority="high"
+              className="block drop-shadow-[2px_4px_0_rgb(43_29_20/0.25)]"
+              style={{ width: dishW, height: dishH }}
             />
           ) : (
             <>
@@ -104,7 +112,9 @@ export function ServePlate({ emoji, name, image, serve }: Props) {
             width={640}
             height={247}
             decoding="async"
-            className={`absolute left-[40px] z-0 w-[300px] max-w-none ${image ? "top-[calc(100%-70px)]" : "top-[calc(100%-34px)]"}`}
+            className="absolute left-[40px] z-0 h-auto w-[300px] max-w-none"
+            // 손바닥이 그릇 아랫부분을 받치도록 그릇 높이 기준으로 위치를 고정
+            style={{ top: image ? dishH - 70 : dishH - 34 }}
             initial={{ x: 340 }}
             animate={{ x: [340, 0, 0, 420] }}
             transition={{ duration: total, times: [0, land, land + 0.15, 1], ease: ["easeOut", "linear", "easeIn"] }}
