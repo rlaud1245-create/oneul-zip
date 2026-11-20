@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/balance", changeFrequency: "daily", priority: 0.9 },
     { path: "/fortune", changeFrequency: "daily", priority: 0.9 },
     { path: "/festival", changeFrequency: "daily", priority: 0.9 },
+    { path: "/stamp", changeFrequency: "monthly", priority: 0.5 },
     { path: "/about", changeFrequency: "monthly", priority: 0.4 },
     { path: "/privacy", changeFrequency: "monthly", priority: 0.2 },
     ...FOOD_COLLECTIONS.map((c) => ({ path: `/food/${c.slug}`, changeFrequency: "weekly" as const, priority: 0.7 })),

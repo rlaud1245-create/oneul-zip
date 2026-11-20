@@ -7,7 +7,7 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { SHOPS, shopForPath } from "@/lib/shops";
 
-const NAV = [...SHOPS.map((s) => ({ href: s.path, label: s.menu })), { href: "/saved", label: "저장함" }];
+const NAV = [...SHOPS.map((s) => ({ href: s.path, label: s.menu })), { href: "/stamp", label: "도장판" }, { href: "/saved", label: "저장함" }];
 
 export function Logo() {
   return <span className="font-sign text-[22px] tracking-tight">오늘.zip</span>;

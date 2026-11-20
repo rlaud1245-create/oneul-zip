@@ -6,6 +6,7 @@ import { ImageIcon, MapPin, Phone, X } from "lucide-react";
 import { StickyAction } from "@/components/ShopParts";
 import { cn } from "@/lib/cn";
 import { dayIndex } from "@/lib/kst";
+import { recordStamp } from "@/lib/stamps";
 import type { Festival } from "./festivals";
 import { regionHref } from "./regions";
 
@@ -123,6 +124,7 @@ export function FestivalBoard({ today, festivals, ok, initialRegion = "전체" }
   function open(id: string) {
     setSelectedId(id);
     setPosterOpen(false);
+    recordStamp("festival");
     requestAnimationFrame(() => detailRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }));
   }
 

@@ -10,6 +10,7 @@ import { formatKoreanDate, kstDateKey } from "@/lib/kst";
 import { luckyZodiacs } from "@/data/fortunes";
 import { pickDaily } from "@/lib/random";
 import { shopInfo } from "@/lib/shops";
+import { StampMini } from "@/features/stamp/StampMini";
 
 /**
  * 오늘의 추천이 자정(KST)에 바로 바뀌도록 요청마다 렌더링.
@@ -110,6 +111,7 @@ export default function HomePage() {
               );
             })}
           </ul>
+          <StampMini today={today} />
         </section>
 
         <AdSlot id="home-bottom" className="mt-12" />

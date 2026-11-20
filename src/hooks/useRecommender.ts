@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { pick, type Condition, type RelaxHint } from "@/lib/recommend";
+import { shopForPath } from "@/lib/shops";
+import { recordStamp } from "@/lib/stamps";
 
 export type RecommendStatus = "idle" | "result" | "empty";
 
@@ -62,6 +64,9 @@ export function useRecommender<T extends { id: string }, F extends Filters>({
     setRecent((prev) => [item.id, ...prev.filter((id) => id !== item.id)].slice(0, RECENT_LIMIT));
     // 현재 결과를 URL에 반영 → 새로고침·공유 시 같은 결과
     window.history.replaceState(null, "", `${path}?id=${encodeURIComponent(item.id)}`);
+    // 가게를 실제로 이용했으니 오늘의 도장
+    const shop = shopForPath(path);
+    if (shop !== "town") recordStamp(shop);
   };
 
   /** 목록에서 직접 고른 항목을 결과로 보여주기 */

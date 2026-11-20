@@ -7,6 +7,7 @@ import { Check, ChevronRight, RotateCcw } from "lucide-react";
 import { ShareButton } from "@/components/ShareButton";
 import { useHydrated, useLocalStorage } from "@/hooks/useLocalStorage";
 import { BALANCE_CATEGORY_LABEL } from "@/lib/labels";
+import { recordStamp } from "@/lib/stamps";
 import { STORAGE_KEYS } from "@/lib/storage";
 import type { BalanceQuestion, Choice } from "@/types";
 import { buildPullBoard } from "./pullBoard";
@@ -62,6 +63,7 @@ export function BalanceGame({ question, dateKey, dateLabel, isToday, past }: Pro
     setOpened((prev) => [...prev, index]);
     setVotes((prev) => ({ ...prev, [question.id]: side }));
     void voteStore.submit(question.id, side);
+    recordStamp("stationery");
   };
 
   const reset = () => {

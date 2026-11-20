@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
 };
 
-const UPDATED_AT = "2026년 11월 20일";
+const UPDATED_AT = "2026년 11월 21일";
 
 export default function PrivacyPage() {
   return (
@@ -31,6 +31,7 @@ export default function PrivacyPage() {
             <li>저장한 추천 결과</li>
             <li>밸런스 게임에서 고른 선택</li>
             <li>오늘의 운세에서 고른 띠</li>
+            <li>단골 도장판의 도장 기록(날짜와 들른 가게)</li>
           </ul>
           <p className="mt-2">
             이 정보는 서버로 전송되지 않으며, 브라우저의 사이트 데이터를 삭제하면 함께 삭제됩니다.

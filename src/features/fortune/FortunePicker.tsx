@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { ShareButton } from "@/components/ShareButton";
 import { StickyAction } from "@/components/ShopParts";
 import { ZODIAC, fortuneFor, isZodiac, zodiacOfYear, type Zodiac } from "@/data/fortunes";
 import { useHydrated, useLocalStorage } from "@/hooks/useLocalStorage";
 import { cn } from "@/lib/cn";
+import { EMPTY_STAMPS, hasGoldTalisman, recordStamp, type StampData } from "@/lib/stamps";
 import { STORAGE_KEYS } from "@/lib/storage";
 
 interface Props {
@@ -28,6 +29,14 @@ export function FortunePicker({ dateKey, initialZodiac }: Props) {
 
   const zodiac: Zodiac | null = shared ?? (hydrated && isZodiac(saved) ? saved : null);
   const fortune = zodiac ? fortuneFor(dateKey, zodiac) : null;
+  const [stamps] = useLocalStorage<StampData>(STORAGE_KEYS.stamps, EMPTY_STAMPS);
+  // 도장판 30칸을 한 번이라도 채우면 부적이 금색으로 바뀝니다.
+  const gold = hydrated && !shared && hasGoldTalisman(stamps.list);
+
+  // 내 띠의 부적을 받았으면 오늘의 도장 (친구가 보낸 부적을 구경하는 것만으로는 찍지 않음)
+  useEffect(() => {
+    if (zodiac && !shared) recordStamp("fortune");
+  }, [zodiac, shared]);
 
   const choose = (z: Zodiac) => {
     setShared(null);
@@ -101,13 +110,15 @@ export function FortunePicker({ dateKey, initialZodiac }: Props) {
             initial={{ opacity: 0, y: 8, rotate: 0 }}
             animate={{ opacity: 1, y: 0, rotate: -0.6 }}
             transition={{ duration: 0.25 }}
-            className="talisman relative rounded-md border-4 border-ink px-5 py-5 shadow-[5px_5px_0_var(--shop-sign)]"
+            className={cn("talisman relative rounded-md border-4 border-ink px-5 py-5 shadow-[5px_5px_0_var(--shop-sign)]", gold && "talisman-gold")}
           >
             <div className="pointer-events-none absolute inset-1.5 rounded-sm border-2 border-primary" aria-hidden />
             <div className="relative flex items-start justify-between gap-3">
               <div>
                 <p className="font-label text-[16px] text-primary-deep">
-                  {shared ? `친구가 보낸 ${fortune.zodiac}띠 부적` : `${fortune.zodiac}띠 오늘의 부적`}
+                  {shared
+                    ? `친구가 보낸 ${fortune.zodiac}띠 부적`
+                    : `${fortune.zodiac}띠 오늘의 ${gold ? "황금 부적" : "부적"}`}
                 </p>
                 <p className="font-brush text-[52px] leading-none text-primary-deep">{fortune.grade}</p>
               </div>
