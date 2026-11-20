@@ -7,6 +7,7 @@ import { activities } from "@/data/activities";
 import { foods } from "@/data/foods";
 import { questionForDate } from "@/features/balance/daily";
 import { formatKoreanDate, kstDateKey } from "@/lib/kst";
+import { luckyZodiacs } from "@/data/fortunes";
 import { pickDaily } from "@/lib/random";
 import { shopInfo } from "@/lib/shops";
 
@@ -51,6 +52,14 @@ export default function HomePage() {
       pick: `${question.a} vs ${question.b}`,
       note: "고르기 어렵다면 한 칸 뜯어보세요.",
     },
+    {
+      theme: "fortune" as const,
+      href: "/fortune",
+      pickHref: "/fortune",
+      label: "오늘의 부적",
+      pick: luckyZodiacs(today).length ? `오늘 대길: ${luckyZodiacs(today).join(", ")}띠` : "띠별 부적 12장",
+      note: "무슨 띠세요? 오늘의 부적을 받아가세요.",
+    },
   ];
 
   return (
@@ -69,7 +78,7 @@ export default function HomePage() {
             </h2>
             <p className="font-label text-[15px] text-muted">매일 자정(한국 시간)에 바뀌어요</p>
           </div>
-          <ul className="mt-4 grid gap-4 sm:grid-cols-3">
+          <ul className="mt-4 grid gap-4 sm:grid-cols-2">
             {shops.map((s) => {
               const info = shopInfo(s.theme);
               return (

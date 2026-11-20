@@ -9,6 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/food", changeFrequency: "weekly", priority: 0.9 },
     { path: "/activity", changeFrequency: "weekly", priority: 0.9 },
     { path: "/balance", changeFrequency: "daily", priority: 0.9 },
+    { path: "/fortune", changeFrequency: "daily", priority: 0.9 },
     { path: "/about", changeFrequency: "monthly", priority: 0.4 },
     { path: "/privacy", changeFrequency: "monthly", priority: 0.2 },
     ...FOOD_COLLECTIONS.map((c) => ({ path: `/food/${c.slug}`, changeFrequency: "weekly" as const, priority: 0.7 })),

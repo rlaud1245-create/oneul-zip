@@ -11,9 +11,12 @@ interface Props {
   /** 사이트 내부 경로. 예: "/food?id=donkatsu" */
   path: string;
   className?: string;
+  /** 버튼 모양. 기본은 보조 버튼 */
+  variant?: "ghost" | "primary";
+  label?: string;
 }
 
-export function ShareButton({ title, text, path, className }: Props) {
+export function ShareButton({ title, text, path, className, variant = "ghost", label = "공유하기" }: Props) {
   const [message, setMessage] = useState<string | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -36,9 +39,9 @@ export function ShareButton({ title, text, path, className }: Props) {
 
   return (
     <>
-      <button type="button" onClick={handleClick} className={cn("btn-ghost", className)}>
+      <button type="button" onClick={handleClick} className={cn(variant === "primary" ? "btn-primary" : "btn-ghost", className)}>
         <Share2 className="size-4" aria-hidden />
-        공유하기
+        {label}
       </button>
       <p
         role="status"

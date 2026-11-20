@@ -20,12 +20,12 @@ export function ShopSign({ shop, title, note, description, width = "max-w-5xl" }
   return (
     <header className="sign-band">
       <div className={`mx-auto w-full ${width} px-5 pb-6 pt-6 sm:pb-8 sm:pt-9`}>
-        <div className="flex items-center justify-between gap-3 font-label text-[15px] text-ink">
+        <div className="flex items-center justify-between gap-3 font-label text-[15px]">
           <span>{shop}</span>
           {note && <span>{note}</span>}
         </div>
         <h1 className="sign-title mt-2 text-[44px] leading-[1.05] sm:text-6xl">{title}</h1>
-        {description && <p className="mt-3 max-w-xl text-[15px] font-medium leading-relaxed text-ink">{description}</p>}
+        {description && <p className="mt-3 max-w-xl text-[15px] font-medium leading-relaxed">{description}</p>}
       </div>
     </header>
   );

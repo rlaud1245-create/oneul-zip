@@ -4,6 +4,7 @@ export const STORAGE_KEYS = {
   recentActivity: "oneul:recent:activity",
   saved: "oneul:saved",
   votes: "oneul:votes",
+  zodiac: "oneul:zodiac",
 } as const;
 
 export const STORAGE_EVENT = "oneul-storage";

@@ -12,6 +12,8 @@
   --color-primary-light: var(--shop-light); /* 옅은 강조 배경 */
   --color-on-strong: var(--shop-on-strong); /* 주 버튼 글자 */
   --color-sign: var(--shop-sign); /* 간판 배경 */
+  --color-on-sign: var(--shop-on-sign); /* 간판 위 작은 글씨 */
+  --color-sign-title: var(--shop-sign-title); /* 간판 제목 */
   --color-canvas: var(--shop-paper); /* 바탕 종이 */
   --color-surface: #fff8e6; /* 카드 종이 */
   --color-ink: #2b1d14; /* 먹색 (테두리, 본문) */
@@ -26,14 +28,22 @@
     "Noto Sans KR", "Malgun Gothic", sans-serif;
   --font-sign: "Black Han Sans", "Pretendard Variable", sans-serif; /* 간판 제목 */
   --font-label: "Do Hyeon", "Pretendard Variable", sans-serif; /* 가격표, 쪽지 글씨 */
+  --font-brush: "Nanum Brush Script", "Do Hyeon", cursive; /* 부적 붓글씨 */
 
   --radius-card: 0.625rem;
   --shadow-soft: 0 3px 0 rgb(43 29 20 / 0.9);
 }
 
 /* 동네 기본값 (메인, 소개 등) */
+:root {
+  --shop-on-sign: #2b1d14;
+  --shop-sign-title: #2b1d14;
+}
+
 :root,
 [data-shop="town"] {
+  --shop-on-sign: #2b1d14;
+  --shop-sign-title: #2b1d14;
   --shop-accent: #c8412e;
   --shop-strong: #c8412e;
   --shop-deep: #a8331f;
@@ -45,6 +55,8 @@
 
 /* 오늘 뭐 먹지: 오늘.zip 분식 */
 [data-shop="bunsik"] {
+  --shop-on-sign: #2b1d14;
+  --shop-sign-title: #2b1d14;
   --shop-accent: #c8412e;
   --shop-strong: #c8412e;
   --shop-deep: #a8331f;
@@ -56,6 +68,8 @@
 
 /* 오늘 뭐 하지: 오늘.zip 랜드 (놀이동산) */
 [data-shop="land"] {
+  --shop-on-sign: #2b1d14;
+  --shop-sign-title: #2b1d14;
   --shop-accent: #e8a0a8;
   --shop-strong: #e8a0a8;
   --shop-deep: #2c5459;
@@ -65,8 +79,23 @@
   --shop-paper: #f1e7d0;
 }
 
+/* 오늘의 운세: 오늘.zip 철학관 (부적) */
+[data-shop="fortune"] {
+  --shop-accent: #b5372a;
+  --shop-strong: #b5372a;
+  --shop-deep: #8e2a20;
+  --shop-light: #f2d35b;
+  --shop-on-strong: #ffffff;
+  --shop-sign: #2f3b5e;
+  --shop-on-sign: #efe3c8;
+  --shop-sign-title: #f2d35b;
+  --shop-paper: #efe3c8;
+}
+
 /* 오늘의 선택: 오늘.zip 문방구 (뽑기판) */
 [data-shop="stationery"] {
+  --shop-on-sign: #2b1d14;
+  --shop-sign-title: #2b1d14;
   --shop-accent: #b5372a;
   --shop-strong: #b5372a;
   --shop-deep: #8e2a20;
@@ -115,11 +144,13 @@
     background-image: radial-gradient(rgb(43 29 20 / 0.16) 1.2px, transparent 1.5px);
     background-size: 5px 5px;
     border-bottom: 5px solid var(--color-ink);
+    color: var(--shop-on-sign);
   }
 
   /* 간판 제목: 색이 살짝 밀려 찍힌 인쇄 그림자 */
   .sign-title {
-    @apply font-sign font-normal text-ink;
+    @apply font-sign font-normal;
+    color: var(--shop-sign-title);
     text-shadow: 3px 3px 0 var(--shop-accent);
   }
 
@@ -137,6 +168,13 @@
 
   .chip {
     @apply inline-flex min-h-10 items-center rounded-full border-2 border-ink bg-surface px-4 font-label text-[17px] text-ink transition hover:bg-primary-light aria-pressed:bg-primary-strong aria-pressed:text-on-strong;
+  }
+
+  /* 부적 종이 */
+  .talisman {
+    background-color: #f2d35b;
+    background-image: radial-gradient(rgb(181 55 42 / 0.1) 1px, transparent 1.3px);
+    background-size: 5px 5px;
   }
 
   /* 메뉴판 점선 */

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { activities } from "@/data/activities";
 import { foods } from "@/data/foods";
+import { luckyZodiacs } from "@/data/fortunes";
 import { questionForDate } from "@/features/balance/daily";
 import { kstDateKey } from "@/lib/kst";
 import { pickDaily } from "@/lib/random";
@@ -12,11 +13,18 @@ export function ShopCrossLinks({ current }: { current: ShopTheme }) {
   const food = pickDaily(foods, today, "food");
   const activity = pickDaily(activities, today, "activity");
   const question = questionForDate(today);
+  const lucky = luckyZodiacs(today);
 
   const links = [
     { theme: "bunsik", label: "오늘 뭐 먹지", title: food.name, href: `/food?id=${food.id}` },
     { theme: "land", label: "오늘 뭐 하지", title: activity.name, href: `/activity?id=${activity.id}` },
     { theme: "stationery", label: "오늘의 선택", title: `${question.a} vs ${question.b}`, href: "/balance" },
+    {
+      theme: "fortune",
+      label: "오늘의 운세",
+      title: lucky.length ? `오늘 대길: ${lucky.join(", ")}띠` : "띠별 오늘의 부적",
+      href: "/fortune",
+    },
   ].filter((l) => l.theme !== current);
 
   return (

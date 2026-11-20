@@ -5,7 +5,7 @@
  *   2) 여기 SHOPS에 한 줄 추가
  *   3) 페이지를 <Shop theme="새이름"> + <ShopSign>으로 감싸기
  */
-export type ShopTheme = "town" | "bunsik" | "land" | "stationery";
+export type ShopTheme = "town" | "bunsik" | "land" | "stationery" | "fortune";
 
 export interface ShopInfo {
   theme: ShopTheme;
@@ -20,6 +20,7 @@ export const SHOPS: ShopInfo[] = [
   { theme: "bunsik", name: "오늘.zip 분식", menu: "오늘 뭐 먹지", path: "/food" },
   { theme: "land", name: "오늘.zip 랜드", menu: "오늘 뭐 하지", path: "/activity" },
   { theme: "stationery", name: "오늘.zip 문방구", menu: "오늘의 선택", path: "/balance" },
+  { theme: "fortune", name: "오늘.zip 철학관", menu: "오늘의 운세", path: "/fortune" },
 ];
 
 export function shopForPath(pathname: string): ShopTheme {
