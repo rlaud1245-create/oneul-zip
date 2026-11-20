@@ -29,6 +29,9 @@ export const metadata: Metadata = {
     description: SITE.description,
   },
   formatDetection: { telephone: false },
+  verification: {
+    other: { "naver-site-verification": "20730b9f6d28fc9b5b25fe91ee26eefe6616a3c4" },
+  },
 };
 
 export const viewport: Viewport = {
