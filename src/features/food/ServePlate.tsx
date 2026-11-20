@@ -33,7 +33,10 @@ export function ServePlate({ emoji, name, image, serve }: Props) {
   const land = 0.45;
 
   return (
-    <div className={`relative -mx-5 overflow-hidden px-5 ${image ? "h-[200px]" : "h-[150px]"}`} aria-hidden>
+    <div
+      className={`relative -mx-5 overflow-x-clip px-5 ${image ? "pt-6" : "pt-16"} ${animated ? "pb-[50px]" : "pb-[22px]"}`}
+      aria-hidden
+    >
       {/* 김 */}
       <motion.div
         className="absolute left-1/2 top-1 flex -translate-x-1/2 gap-3"
@@ -48,7 +51,7 @@ export function ServePlate({ emoji, name, image, serve }: Props) {
         ))}
       </motion.div>
 
-      <div className={`absolute bottom-[22px] left-1/2 -translate-x-1/2 ${image ? "w-[200px]" : "w-[188px]"}`}>
+      <div className={`relative mx-auto ${image ? "w-fit max-w-[220px]" : "w-[188px]"}`}>
         {/* 접시 */}
         <motion.div
           className="relative z-10"
@@ -73,7 +76,7 @@ export function ServePlate({ emoji, name, image, serve }: Props) {
               width={480}
               height={400}
               decoding="async"
-              className="block h-auto w-full drop-shadow-[2px_4px_0_rgb(43_29_20/0.25)]"
+              className="block h-auto max-h-[180px] w-auto max-w-full drop-shadow-[2px_4px_0_rgb(43_29_20/0.25)]"
             />
           ) : (
             <>
@@ -93,39 +96,19 @@ export function ServePlate({ emoji, name, image, serve }: Props) {
           </span>
         </motion.div>
 
-        {/* 주방장 손 (접시를 아래에서 받쳐 들고 있다가 빠짐) */}
+        {/* 주방장 손 (일러스트). 접시를 아래에서 받쳐 들고 들어왔다가 빠짐 */}
         {animated && (
-          <motion.svg
-            viewBox="0 0 240 70"
-            className={`absolute -right-[150px] z-0 w-[240px] ${image ? "bottom-[-14px]" : "bottom-[-30px]"}`}
+          <motion.img
+            src="/foods/chef-hand.webp"
+            alt=""
+            width={640}
+            height={247}
+            decoding="async"
+            className={`absolute left-[40px] z-0 w-[300px] max-w-none ${image ? "top-[calc(100%-70px)]" : "top-[calc(100%-34px)]"}`}
             initial={{ x: 340 }}
             animate={{ x: [340, 0, 0, 420] }}
             transition={{ duration: total, times: [0, land, land + 0.15, 1], ease: ["easeOut", "linear", "easeIn"] }}
-          >
-            {/* 조리복 소매 */}
-            <path d="M118 14 L240 6 L240 64 L118 60 Z" fill="#FFFFFF" stroke="#2B1D14" strokeWidth="3" strokeLinejoin="round" />
-            <path d="M118 14 L136 13 L136 61 L118 60 Z" fill="#E9E1CF" stroke="#2B1D14" strokeWidth="3" strokeLinejoin="round" />
-            <circle cx="170" cy="26" r="3" fill="#2B1D14" />
-            <circle cx="170" cy="44" r="3" fill="#2B1D14" />
-            {/* 손바닥 (위로 향해 접시를 받침) */}
-            <path
-              d="M120 22 C 96 20, 54 22, 30 28 C 18 31, 18 44, 30 45 L 96 50 C 108 51, 120 48, 120 40 Z"
-              fill="#F2C49B"
-              stroke="#2B1D14"
-              strokeWidth="3"
-              strokeLinejoin="round"
-            />
-            {/* 엄지 */}
-            <path
-              d="M104 23 C 100 10, 86 8, 82 15 C 79 21, 88 25, 96 27"
-              fill="#F2C49B"
-              stroke="#2B1D14"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path d="M50 37 L 76 39 M58 43 L 84 45" stroke="#C98E63" strokeWidth="2" strokeLinecap="round" />
-          </motion.svg>
+          />
         )}
       </div>
     </div>
