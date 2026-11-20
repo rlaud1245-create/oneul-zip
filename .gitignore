@@ -15,3 +15,7 @@ npm-debug.log*
 .wrangler/
 .dev.vars
 cloudflare-env.d.ts
+
+# 메뉴 그림 원본 (사이트에는 public/foods의 변환본만 올라감)
+/메뉴/
+/menu-art/
