@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { ACTIVITY_COLLECTIONS, groupCollections } from "@/lib/collections";
 import { AdSlot } from "@/components/AdSlot";
+import { CollectionNav } from "@/components/CollectionView";
 import { InfoSection } from "@/components/InfoSection";
 import { PageIntro } from "@/components/PageIntro";
 import { activities, findActivity } from "@/data/activities";
@@ -55,6 +57,14 @@ export default async function ActivityPage({ searchParams }: Props) {
           보여드려요. 예상 시간과 비용은 대략적인 예시 추정치라 장소나 상황에 따라 달라질 수 있어요.
         </p>
       </InfoSection>
+
+      <CollectionNav
+        title="상황별 활동 모아보기"
+        groups={groupCollections(ACTIVITY_COLLECTIONS).map(({ group, items }) => ({
+          group,
+          links: items.map((c) => ({ href: `/activity/${c.slug}`, label: c.label })),
+        }))}
+      />
     </div>
   );
 }

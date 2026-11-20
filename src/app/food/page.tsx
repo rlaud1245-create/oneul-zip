@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { FOOD_COLLECTIONS, groupCollections } from "@/lib/collections";
 import { AdSlot } from "@/components/AdSlot";
+import { CollectionNav } from "@/components/CollectionView";
 import { InfoSection } from "@/components/InfoSection";
 import { PageIntro } from "@/components/PageIntro";
 import { foods, findFood } from "@/data/foods";
@@ -51,6 +53,14 @@ export default async function FoodPage({ searchParams }: Props) {
         </p>
         <p>가격대는 1인 기준 대략적인 범위이고, 실제 가격은 가게마다 다를 수 있어요.</p>
       </InfoSection>
+
+      <CollectionNav
+        title="상황별 메뉴 모아보기"
+        groups={groupCollections(FOOD_COLLECTIONS).map(({ group, items }) => ({
+          group,
+          links: items.map((c) => ({ href: `/food/${c.slug}`, label: c.label })),
+        }))}
+      />
     </div>
   );
 }
