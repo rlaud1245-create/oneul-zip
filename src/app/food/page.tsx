@@ -21,8 +21,8 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     title: TITLE,
     description: DESCRIPTION,
     alternates: { canonical: "/food" },
-    openGraph: { title: ogTitle, description: ogDescription, url: food ? `/food?id=${food.id}` : "/food" },
-    twitter: { title: ogTitle, description: ogDescription },
+    openGraph: { images: ["/opengraph-image.png"], title: ogTitle, description: ogDescription, url: food ? `/food?id=${food.id}` : "/food" },
+    twitter: { card: "summary_large_image", images: ["/twitter-image.png"], title: ogTitle, description: ogDescription },
   };
 }
 
