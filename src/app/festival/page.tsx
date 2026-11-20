@@ -35,7 +35,7 @@ export default async function FestivalPage() {
         description="오늘 열리는 축제 전단지를 붙여 놨어요. 지역을 고르거나 내 주변을 눌러 가까운 축제를 찾아보세요."
       />
       <div className="mx-auto w-full max-w-3xl px-5 pb-16 pt-6 sm:pt-8">
-        <FestivalBoard today={today} festivals={festivals} ok={ok} />
+        <FestivalBoard key="전체" today={today} festivals={festivals} ok={ok} />
         <ShopCrossLinks current="festival" />
 
         <AdSlot id="festival-bottom" className="mt-10" />

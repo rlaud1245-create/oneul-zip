@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { ACTIVITY_COLLECTIONS, FOOD_COLLECTIONS } from "@/lib/collections";
+import { FESTIVAL_REGIONS } from "@/features/festival/regions";
 import { SITE } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -14,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/about", changeFrequency: "monthly", priority: 0.4 },
     { path: "/privacy", changeFrequency: "monthly", priority: 0.2 },
     ...FOOD_COLLECTIONS.map((c) => ({ path: `/food/${c.slug}`, changeFrequency: "weekly" as const, priority: 0.7 })),
+    ...FESTIVAL_REGIONS.map((r) => ({ path: `/festival/${r.slug}`, changeFrequency: "daily" as const, priority: 0.7 })),
     ...ACTIVITY_COLLECTIONS.map((c) => ({ path: `/activity/${c.slug}`, changeFrequency: "weekly" as const, priority: 0.7 })),
   ];
 

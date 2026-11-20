@@ -76,8 +76,10 @@ const REGION_OF: Record<string, string> = {
 };
 
 /** "전남광주통합특별시"처럼 새로 합쳐진 시·도는 "통합특별시"를 떼고 그대로 씁니다. */
-function regionOf(first: string): string {
+function regionOf(first: string, second = ""): string {
   if (REGION_OF[first]) return REGION_OF[first];
+  // 전남광주통합특별시: 자치구(○○구)는 광주, 시·군은 전남으로 나눠서 예전 지역 이름으로 찾을 수 있게 합니다.
+  if (first === "전남광주통합특별시") return second.endsWith("구") ? "광주" : "전남";
   const merged = first.match(/^(.+)통합특별시$/);
   return merged ? merged[1] : "기타";
 }
@@ -120,11 +122,11 @@ function normalize(item: RawItem): Festival | null {
   if (!start || !end || !title) return null;
   if (String(item.progresstype ?? "").includes("취소")) return null;
   const address = [item.addr1, item.addr2].filter(Boolean).join(" ").trim();
-  const first = address.split(/\s+/)[0] ?? "";
+  const [first = "", second = ""] = address.split(/\s+/);
   return {
     id: String(item.contentid ?? title),
     title,
-    region: regionOf(first),
+    region: regionOf(first, second),
     address,
     start,
     end,
@@ -188,7 +190,7 @@ async function loadFromApi(today: string): Promise<FestivalResult> {
 const memory = new Map<string, { at: number; value: FestivalResult }>();
 
 export async function festivalsFor(today: string): Promise<FestivalResult> {
-  const cacheKey = `https://cache.oneulzip.com/festivals/v3/${today}`;
+  const cacheKey = `https://cache.oneulzip.com/festivals/v4/${today}`;
   const hit = memory.get(cacheKey);
   if (hit && Date.now() - hit.at < CACHE_SECONDS * 1000) return hit.value;
 

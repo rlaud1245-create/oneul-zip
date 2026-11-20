@@ -1,11 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import { ImageIcon, MapPin, Phone, X } from "lucide-react";
 import { StickyAction } from "@/components/ShopParts";
 import { cn } from "@/lib/cn";
 import { dayIndex } from "@/lib/kst";
 import type { Festival } from "./festivals";
+import { regionHref } from "./regions";
 
 /**
  * 동네 게시판: 오늘 열리는 축제 전단지
@@ -59,10 +61,12 @@ interface Props {
   today: string;
   festivals: Festival[];
   ok: boolean;
+  /** 지역 페이지에서 처음 보여줄 지역 (기본: 전체) */
+  initialRegion?: string;
 }
 
-export function FestivalBoard({ today, festivals, ok }: Props) {
-  const [region, setRegion] = useState<string>("전체");
+export function FestivalBoard({ today, festivals, ok, initialRegion = "전체" }: Props) {
+  const [region, setRegion] = useState<string>(initialRegion);
   const [geo, setGeo] = useState<GeoState>("idle");
   const [here, setHere] = useState<{ lat: number; lng: number } | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -72,6 +76,8 @@ export function FestivalBoard({ today, festivals, ok }: Props) {
 
   const regions = useMemo(() => {
     const present = new Set(festivals.map((f) => f.region));
+    // 지금 보고 있는 지역 페이지는 오늘 축제가 없어도 칩을 남겨 둡니다.
+    if (initialRegion !== "전체") present.add(initialRegion);
     // 목록에 없는 새 지역 이름(통합 시·도 등)도 "기타" 앞에 붙여 보여줍니다.
     const extra = [...present].filter((r) => !REGION_ORDER.includes(r)).sort();
     const known = REGION_ORDER.filter((r) => present.has(r) && r !== "기타");
@@ -180,20 +186,30 @@ export function FestivalBoard({ today, festivals, ok }: Props) {
         aria-label="지역"
         className="-mx-5 mt-3 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {["전체", ...regions].map((r) => (
-          <button
-            key={r}
-            type="button"
-            onClick={() => choose(r)}
-            aria-pressed={region === r}
-            className={cn(
-              "min-h-10 shrink-0 rounded-full border-2 border-ink px-3.5 font-label text-[16px]",
-              region === r ? "bg-ink text-surface" : "bg-surface hover:bg-primary-light",
-            )}
-          >
-            {r}
-          </button>
-        ))}
+        {["전체", ...regions].map((r) => {
+          const className = cn(
+            "inline-flex min-h-10 shrink-0 items-center rounded-full border-2 border-ink px-3.5 font-label text-[16px]",
+            region === r ? "bg-ink text-surface" : "bg-surface hover:bg-primary-light",
+          );
+          const href = regionHref(r);
+          // 지역 페이지가 있는 칩은 그 페이지로 이동합니다. (검색엔진도 지역 페이지를 따라갈 수 있게)
+          return href ? (
+            <Link
+              key={r}
+              href={href}
+              scroll={false}
+              onClick={() => choose(r)}
+              aria-current={region === r ? "page" : undefined}
+              className={className}
+            >
+              {r}
+            </Link>
+          ) : (
+            <button key={r} type="button" onClick={() => choose(r)} aria-pressed={region === r} className={className}>
+              {r}
+            </button>
+          );
+        })}
       </div>
 
       {/* 고른 전단지 */}
@@ -296,7 +312,9 @@ export function FestivalBoard({ today, festivals, ok }: Props) {
       <div className="mt-5 rounded-card border-[3px] border-ink bg-[#c99d66] p-3 [background-image:radial-gradient(rgb(43_29_20/0.18)_1px,transparent_1.4px)] [background-size:7px_7px] sm:p-4">
         {list.length === 0 ? (
           <p className="rounded-lg bg-surface px-4 py-8 text-center text-[15px]">
-            {region === NEAR ? "근처에 위치가 표시된 축제가 없어요. 지역을 골라 보세요." : "이 지역은 오늘 붙은 전단지가 없어요."}
+            {region === NEAR
+              ? "근처에 위치가 표시된 축제가 없어요. 지역을 골라 보세요."
+              : "오늘은 이 지역에 붙은 전단지가 없어요. 위에서 다른 지역을 골라 보세요."}
           </p>
         ) : (
           <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
