@@ -16,6 +16,7 @@ import type { Condition } from "@/lib/recommend";
 import { scrollToResult } from "@/lib/scroll";
 import { STORAGE_KEYS } from "@/lib/storage";
 import type { Companion, Food, FoodCategory, PriceRange } from "@/types";
+import { ServePlate, serveDuration } from "./ServePlate";
 
 type FoodFilters = {
   category: FoodCategory | null;
@@ -74,6 +75,8 @@ function buildConditions(f: FoodFilters): Condition<Food>[] {
 export function FoodPicker({ initialId }: { initialId?: string }) {
   const resultRef = useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = useState(false);
+  /** 주방장 손 연출: 처음 맘대로는 길게, 다음부터는 짧게, 메뉴판에서 직접 고르면 손 없이 */
+  const [serve, setServe] = useState<"full" | "quick" | "none">("none");
   const r = useRecommender({
     items: foods,
     emptyFilters: EMPTY_FILTERS,
@@ -84,6 +87,7 @@ export function FoodPicker({ initialId }: { initialId?: string }) {
   });
 
   const run = () => {
+    setServe(r.status === "result" ? "quick" : "full");
     r.recommend();
     scrollToResult(resultRef.current);
   };
@@ -147,6 +151,7 @@ export function FoodPicker({ initialId }: { initialId?: string }) {
                   <button
                     type="button"
                     onClick={() => {
+                      setServe("none");
                       r.show(item);
                       scrollToResult(resultRef.current);
                     }}
@@ -195,11 +200,12 @@ export function FoodPicker({ initialId }: { initialId?: string }) {
 
       <div ref={resultRef} aria-live="polite" className="scroll-mt-20">
         {r.status === "result" && food ? (
+          <div key={`${food.id}-${r.round}`}>
+          <ServePlate emoji={food.emoji} name={food.name} serve={serve} />
           <motion.article
-            key={`${food.id}-${r.round}`}
             initial={{ opacity: 0, y: 8, rotate: 0 }}
             animate={{ opacity: 1, y: 0, rotate: -1 }}
-            transition={{ duration: 0.22 }}
+            transition={{ duration: 0.22, delay: serveDuration(serve) * 0.5 }}
             className="rounded-card border-[3px] border-ink bg-ink px-5 py-4 text-[#FFF8E6]"
           >
             <p className="font-label text-[16px] text-sign">{r.fromShare ? "친구가 보낸 메뉴" : "사장님 추천"}</p>
@@ -229,6 +235,7 @@ export function FoodPicker({ initialId }: { initialId?: string }) {
               />
             </div>
           </motion.article>
+          </div>
         ) : r.status === "empty" ? (
           <ResultEmpty
             noun="메뉴가"
