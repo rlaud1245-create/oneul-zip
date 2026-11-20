@@ -55,9 +55,10 @@ export function ServePlate({ emoji, name, serve }: Props) {
           transition={
             animated
               ? {
-                  x: { duration: total * land, ease: [0.22, 1, 0.36, 1] },
+                  // 손과 같은 가속으로 움직여야 접시가 손에 붙어 들어오는 것처럼 보여요
+                  x: { duration: total * land, ease: "easeOut" },
                   y: { delay: total * land, duration: 0.25, ease: "easeOut" },
-                  rotate: { duration: total * land },
+                  rotate: { duration: total * land, ease: "easeOut" },
                 }
               : undefined
           }
