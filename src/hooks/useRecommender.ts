@@ -51,6 +51,10 @@ export function useRecommender<T extends { id: string }, F extends Filters>({
       return;
     }
 
+    apply(item);
+  };
+
+  const apply = (item: T) => {
     setResult(item);
     setStatus("result");
     setRelax(null);
@@ -58,6 +62,12 @@ export function useRecommender<T extends { id: string }, F extends Filters>({
     setRecent((prev) => [item.id, ...prev.filter((id) => id !== item.id)].slice(0, RECENT_LIMIT));
     // 현재 결과를 URL에 반영 → 새로고침·공유 시 같은 결과
     window.history.replaceState(null, "", `${path}?id=${encodeURIComponent(item.id)}`);
+  };
+
+  /** 목록에서 직접 고른 항목을 결과로 보여주기 */
+  const show = (item: T) => {
+    setFromShare(false);
+    apply(item);
   };
 
   const setFilter = <K extends keyof F>(key: K, value: F[K]) => {
@@ -81,5 +91,5 @@ export function useRecommender<T extends { id: string }, F extends Filters>({
 
   const hasFilters = Object.values(filters).some((value) => value !== null);
 
-  return { filters, setFilter, resetFilters, hasFilters, result, status, fromShare, relax, round, recommend, relaxAndRetry };
+  return { filters, setFilter, resetFilters, hasFilters, result, status, fromShare, relax, round, recommend, relaxAndRetry, show };
 }

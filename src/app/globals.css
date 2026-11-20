@@ -1,24 +1,79 @@
 @import "tailwindcss";
 
-@theme {
-  /* 브랜드 컬러 */
-  --color-primary: #7969e6; /* 포인트, 아이콘, 테두리 */
-  --color-primary-strong: #6655d6; /* 흰 글자 버튼 배경 (명도 대비 4.5:1 이상) */
-  --color-primary-deep: #4f3fc0; /* 연보라 배경 위 글자 */
-  --color-primary-light: #f0edff;
-  --color-canvas: #fafaf8;
-  --color-surface: #ffffff;
-  --color-ink: #222222;
-  --color-muted: #6b6b6b; /* 기획서 #777보다 살짝 진하게: 배경 대비 4.5:1 확보 */
-  --color-line: #eeeeee;
-  --color-yellow: #ffd978;
-  --color-peach: #ffddd2;
+/*
+ * 오늘.zip 레트로 동네 가게 테마
+ * - 모든 색은 --shop-* 변수에서 오고, 가게(data-shop)마다 값만 바꿉니다.
+ * - 새 가게를 추가할 때는 아래 [data-shop="..."] 블록 하나만 더 만들면 됩니다.
+ */
+@theme inline {
+  --color-primary: var(--shop-accent); /* 포인트 (아이콘, 강조선) */
+  --color-primary-strong: var(--shop-strong); /* 주 버튼 배경 */
+  --color-primary-deep: var(--shop-deep); /* 종이 위 강조 글자 (4.5:1 이상) */
+  --color-primary-light: var(--shop-light); /* 옅은 강조 배경 */
+  --color-on-strong: var(--shop-on-strong); /* 주 버튼 글자 */
+  --color-sign: var(--shop-sign); /* 간판 배경 */
+  --color-canvas: var(--shop-paper); /* 바탕 종이 */
+  --color-surface: #fff8e6; /* 카드 종이 */
+  --color-ink: #2b1d14; /* 먹색 (테두리, 본문) */
+  --color-muted: #6b5544; /* 보조 글자 */
+  --color-line: #cfb991; /* 옅은 구분선 */
+  --color-yellow: #ebcb6a;
+  --color-peach: #e8a0a8;
+}
 
+@theme {
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo",
     "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --font-sign: "Black Han Sans", "Pretendard Variable", sans-serif; /* 간판 제목 */
+  --font-label: "Do Hyeon", "Pretendard Variable", sans-serif; /* 가격표, 쪽지 글씨 */
 
-  --radius-card: 1.25rem;
-  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.03), 0 8px 24px rgb(34 34 34 / 0.06);
+  --radius-card: 0.625rem;
+  --shadow-soft: 0 3px 0 rgb(43 29 20 / 0.9);
+}
+
+/* 동네 기본값 (메인, 소개 등) */
+:root,
+[data-shop="town"] {
+  --shop-accent: #c8412e;
+  --shop-strong: #c8412e;
+  --shop-deep: #a8331f;
+  --shop-light: #f6e7a6;
+  --shop-on-strong: #ffffff;
+  --shop-sign: #e9b949;
+  --shop-paper: #f3e6c8;
+}
+
+/* 오늘 뭐 먹지: 오늘.zip 분식 */
+[data-shop="bunsik"] {
+  --shop-accent: #c8412e;
+  --shop-strong: #c8412e;
+  --shop-deep: #a8331f;
+  --shop-light: #f6e7a6;
+  --shop-on-strong: #ffffff;
+  --shop-sign: #e9b949;
+  --shop-paper: #f3e6c8;
+}
+
+/* 오늘 뭐 하지: 오늘.zip 랜드 (놀이동산) */
+[data-shop="land"] {
+  --shop-accent: #e8a0a8;
+  --shop-strong: #e8a0a8;
+  --shop-deep: #2c5459;
+  --shop-light: #bfd8b8;
+  --shop-on-strong: #2b1d14;
+  --shop-sign: #7fb7be;
+  --shop-paper: #f1e7d0;
+}
+
+/* 오늘의 선택: 오늘.zip 문방구 (뽑기판) */
+[data-shop="stationery"] {
+  --shop-accent: #b5372a;
+  --shop-strong: #b5372a;
+  --shop-deep: #8e2a20;
+  --shop-light: #fff0b8;
+  --shop-on-strong: #ffffff;
+  --shop-sign: #ebcb6a;
+  --shop-paper: #f2e2c4;
 }
 
 @layer base {
@@ -28,38 +83,101 @@
   }
 
   body {
-    @apply bg-canvas text-ink antialiased;
+    @apply text-ink antialiased;
+    background-color: #f3e6c8;
+  }
+
+  /* 가게 영역은 자기 종이색 + 인쇄 망점 */
+  [data-shop] {
+    background-color: var(--shop-paper);
+    background-image: radial-gradient(rgb(43 29 20 / 0.08) 1px, transparent 1.2px);
+    background-size: 6px 6px;
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-primary-strong);
+    outline: 3px solid var(--color-ink);
     outline-offset: 2px;
   }
 }
 
 @layer components {
   .card {
-    @apply rounded-card border border-line bg-surface shadow-soft;
+    @apply rounded-card border-[3px] border-ink bg-surface;
   }
 
   .eyebrow {
-    @apply text-sm font-semibold text-primary-deep;
+    @apply font-label text-[17px] text-primary-deep;
+  }
+
+  /* 간판 띠: 망점이 찍힌 색 띠 + 먹색 아래 테두리 */
+  .sign-band {
+    background-color: var(--shop-sign);
+    background-image: radial-gradient(rgb(43 29 20 / 0.16) 1.2px, transparent 1.5px);
+    background-size: 5px 5px;
+    border-bottom: 5px solid var(--color-ink);
+  }
+
+  /* 간판 제목: 색이 살짝 밀려 찍힌 인쇄 그림자 */
+  .sign-title {
+    @apply font-sign font-normal text-ink;
+    text-shadow: 3px 3px 0 var(--shop-accent);
   }
 
   .btn-primary {
-    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-primary-strong px-5 text-[15px] font-semibold text-white transition hover:bg-primary-deep active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex min-h-13 items-center justify-center gap-2 rounded-full border-[3px] border-ink bg-primary-strong px-6 font-sign text-lg font-normal text-on-strong shadow-soft transition active:translate-y-0.5 active:shadow-none disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-secondary {
-    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-primary-light px-5 text-[15px] font-semibold text-primary-deep transition hover:bg-[#e6e1ff] active:scale-[0.98];
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full border-[3px] border-ink bg-primary-light px-5 text-[15px] font-bold text-ink transition active:translate-y-0.5;
   }
 
   .btn-ghost {
-    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-line bg-surface px-5 text-[15px] font-semibold text-ink transition hover:bg-canvas active:scale-[0.98];
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full border-[3px] border-ink bg-surface px-5 text-[15px] font-bold text-ink transition hover:bg-primary-light active:translate-y-0.5;
   }
 
   .chip {
-    @apply inline-flex min-h-10 items-center rounded-full border border-line bg-surface px-4 text-sm font-medium text-ink transition hover:border-primary/60 aria-pressed:border-primary-strong aria-pressed:bg-primary-strong aria-pressed:text-white;
+    @apply inline-flex min-h-10 items-center rounded-full border-2 border-ink bg-surface px-4 font-label text-[17px] text-ink transition hover:bg-primary-light aria-pressed:bg-primary-strong aria-pressed:text-on-strong;
+  }
+
+  /* 메뉴판 점선 */
+  .menu-leader {
+    flex: 1;
+    min-width: 1.5rem;
+    margin: 0 0.5rem;
+    border-bottom: 3px dotted rgb(43 29 20 / 0.55);
+    transform: translateY(-0.35rem);
+  }
+
+  /* 자유이용권: 양옆 홈 */
+  .ticket {
+    -webkit-mask:
+      radial-gradient(circle 12px at 0 var(--notch-y, calc(100% - 92px)), transparent 11.5px, #000 12px) left / 51% 100% no-repeat,
+      radial-gradient(circle 12px at 100% var(--notch-y, calc(100% - 92px)), transparent 11.5px, #000 12px) right / 51% 100% no-repeat;
+    mask:
+      radial-gradient(circle 12px at 0 var(--notch-y, calc(100% - 92px)), transparent 11.5px, #000 12px) left / 51% 100% no-repeat,
+      radial-gradient(circle 12px at 100% var(--notch-y, calc(100% - 92px)), transparent 11.5px, #000 12px) right / 51% 100% no-repeat;
+  }
+
+  /* 뽑기판 칸: 접힌 모서리 */
+  .pull-cell {
+    position: relative;
+    overflow: hidden;
+  }
+  .pull-cell::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    background: linear-gradient(225deg, var(--shop-paper) 50%, rgb(43 29 20 / 0.25) 50%);
+  }
+  .pull-cell[data-state="open"]::after,
+  .pull-cell[data-state="dud"]::after {
+    display: none;
+  }
+  .pull-cell[data-state="dud"] {
+    background-image: repeating-linear-gradient(135deg, rgb(43 29 20 / 0.1) 0 3px, transparent 3px 7px);
   }
 }
 

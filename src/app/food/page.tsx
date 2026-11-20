@@ -3,7 +3,9 @@ import { FOOD_COLLECTIONS, groupCollections } from "@/lib/collections";
 import { AdSlot } from "@/components/AdSlot";
 import { CollectionNav } from "@/components/CollectionView";
 import { InfoSection } from "@/components/InfoSection";
-import { PageIntro } from "@/components/PageIntro";
+import { ShopCrossLinks } from "@/components/ShopCrossLinks";
+import { Shop, ShopSign } from "@/components/ShopSign";
+import { formatKoreanDate, kstDateKey } from "@/lib/kst";
 import { foods, findFood } from "@/data/foods";
 import { FoodPicker } from "@/features/food/FoodPicker";
 
@@ -33,13 +35,17 @@ export default async function FoodPage({ searchParams }: Props) {
   const initialId = typeof id === "string" ? findFood(id)?.id : undefined;
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-5 pb-16">
-      <PageIntro
-        eyebrow="오늘 뭐 먹지?"
-        title="메뉴 고민, 여기서 끝내요"
-        description="조건을 골라도 되고, 그냥 눌러도 돼요. 마음에 안 들면 다시 추천받으세요."
+    <Shop theme="bunsik">
+      <ShopSign
+        width="max-w-2xl"
+        shop="오늘.zip 분식"
+        note={formatKoreanDate(kstDateKey())}
+        title="오늘 뭐 먹지"
+        description="메뉴판에서 직접 골라도 되고, 주방장 맘대로 눌러도 돼요. 마음에 안 들면 다시 시키세요."
       />
+    <div className="mx-auto w-full max-w-2xl px-5 pb-16 pt-6 sm:pt-8">
       <FoodPicker initialId={initialId} />
+      <ShopCrossLinks current="bunsik" />
       <AdSlot id="food-bottom" className="mt-10" />
 
       <InfoSection title="이렇게 추천해요">
@@ -62,5 +68,6 @@ export default async function FoodPage({ searchParams }: Props) {
         }))}
       />
     </div>
+    </Shop>
   );
 }

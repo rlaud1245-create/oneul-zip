@@ -21,7 +21,7 @@ export function ChipGroup<V extends string>({ label, options, value, onChange, a
 
   return (
     <div role="group" aria-labelledby={labelId}>
-      <p id={labelId} className="mb-2.5 text-sm font-semibold">
+      <p id={labelId} className="mb-2.5 font-label text-[18px]">
         {label}
       </p>
       <div className="flex flex-wrap gap-2">

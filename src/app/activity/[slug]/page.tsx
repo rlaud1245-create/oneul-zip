@@ -58,6 +58,7 @@ export default async function ActivityCollectionPage({ params }: Props) {
 
   return (
     <CollectionView
+      theme="land"
       eyebrow={`오늘 뭐 하지? · ${collection.label}`}
       title={collection.title}
       intro={collection.intro}

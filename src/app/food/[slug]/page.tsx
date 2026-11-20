@@ -59,6 +59,7 @@ export default async function FoodCollectionPage({ params }: Props) {
 
   return (
     <CollectionView
+      theme="bunsik"
       eyebrow={`오늘 뭐 먹지? · ${collection.label}`}
       title={collection.title}
       intro={collection.intro}

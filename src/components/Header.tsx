@@ -5,45 +5,38 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { SHOPS, shopForPath } from "@/lib/shops";
 
-const NAV = [
-  { href: "/food", label: "오늘 뭐 먹지" },
-  { href: "/activity", label: "오늘 뭐 하지" },
-  { href: "/balance", label: "오늘의 선택" },
-  { href: "/saved", label: "저장함" },
-];
+const NAV = [...SHOPS.map((s) => ({ href: s.path, label: s.menu })), { href: "/saved", label: "저장함" }];
 
 export function Logo() {
-  return (
-    <span className="text-xl font-bold tracking-tight">
-      오늘<span className="text-primary">.zip</span>
-    </span>
-  );
+  return <span className="font-sign text-[22px] tracking-tight">오늘.zip</span>;
 }
 
 export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <header className="sticky top-0 z-30 border-b border-line/70 bg-canvas/85 backdrop-blur">
+    <header data-shop={shopForPath(pathname)} className="sticky top-0 z-30 border-b-[3px] border-ink">
       <div className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between px-5">
         <Link href="/" aria-label="오늘.zip 홈" className="rounded-lg" onClick={() => setOpen(false)}>
           <Logo />
         </Link>
 
         <nav aria-label="주요 메뉴" className="hidden sm:block">
-          <ul className="flex items-center gap-1">
+          <ul className="flex items-center gap-1.5">
             {NAV.map((item) => {
-              const active = pathname === item.href;
+              const active = isActive(item.href);
               return (
                 <li key={item.href}>
                   <Link
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "rounded-full px-3 py-2 text-sm font-medium transition-colors",
-                      active ? "bg-primary-light text-primary-deep" : "text-muted hover:text-ink",
+                      "rounded-full border-2 px-3.5 py-1.5 font-label text-[16px] transition-colors",
+                      active ? "border-ink bg-primary-strong text-on-strong" : "border-transparent text-ink hover:border-ink",
                     )}
                   >
                     {item.label}
@@ -70,7 +63,7 @@ export function Header() {
         <nav
           id="mobile-menu"
           aria-label="모바일 메뉴"
-          className="border-t border-line bg-surface sm:hidden"
+          className="border-t-2 border-ink bg-surface sm:hidden"
           onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
         >
           <ul className="mx-auto max-w-5xl px-3 py-2">
@@ -78,9 +71,9 @@ export function Header() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  aria-current={pathname === item.href ? "page" : undefined}
+                  aria-current={isActive(item.href) ? "page" : undefined}
                   onClick={() => setOpen(false)}
-                  className="flex min-h-12 items-center rounded-xl px-3 font-medium hover:bg-canvas aria-[current=page]:text-primary-deep"
+                  className="flex min-h-12 items-center rounded-xl px-3 font-label text-[18px] hover:bg-primary-light aria-[current=page]:text-primary-deep"
                 >
                   {item.label}
                 </Link>

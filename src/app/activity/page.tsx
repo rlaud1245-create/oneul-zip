@@ -3,7 +3,9 @@ import { ACTIVITY_COLLECTIONS, groupCollections } from "@/lib/collections";
 import { AdSlot } from "@/components/AdSlot";
 import { CollectionNav } from "@/components/CollectionView";
 import { InfoSection } from "@/components/InfoSection";
-import { PageIntro } from "@/components/PageIntro";
+import { ShopCrossLinks } from "@/components/ShopCrossLinks";
+import { Shop, ShopSign } from "@/components/ShopSign";
+import { formatKoreanDate, kstDateKey } from "@/lib/kst";
 import { activities, findActivity } from "@/data/activities";
 import { ActivityPicker } from "@/features/activity/ActivityPicker";
 
@@ -38,13 +40,17 @@ export default async function ActivityPage({ searchParams }: Props) {
   const initialId = typeof id === "string" ? findActivity(id)?.id : undefined;
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-5 pb-16">
-      <PageIntro
-        eyebrow="오늘 뭐 하지?"
-        title="남는 시간, 뭐 할지 정해 드릴게요"
-        description="지금 상황을 고르면 딱 맞는 할 일을 찾아드려요. 고르지 않고 바로 눌러도 괜찮아요."
+    <Shop theme="land">
+      <ShopSign
+        width="max-w-2xl"
+        shop="오늘.zip 랜드"
+        note={formatKoreanDate(kstDateKey())}
+        title="오늘 뭐 하지"
+        description="오늘 탈 놀이기구를 고르면 딱 맞는 자유이용권을 끊어드려요. 바로 눌러도 괜찮아요."
       />
+    <div className="mx-auto w-full max-w-2xl px-5 pb-16 pt-6 sm:pt-8">
       <ActivityPicker initialId={initialId} />
+      <ShopCrossLinks current="land" />
       <AdSlot id="activity-bottom" className="mt-10" />
 
       <InfoSection title="이렇게 추천해요">
@@ -66,5 +72,6 @@ export default async function ActivityPage({ searchParams }: Props) {
         }))}
       />
     </div>
+    </Shop>
   );
 }

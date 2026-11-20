@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { AdSlot } from "@/components/AdSlot";
 import { InfoSection } from "@/components/InfoSection";
-import { PageIntro } from "@/components/PageIntro";
+import { ShopCrossLinks } from "@/components/ShopCrossLinks";
+import { Shop, ShopSign } from "@/components/ShopSign";
 import { BalanceGame } from "@/features/balance/BalanceGame";
 import { previousDates, questionForDate } from "@/features/balance/daily";
 import { formatKoreanDate, isDateKey, kstDateKey } from "@/lib/kst";
@@ -49,12 +50,15 @@ export default async function BalancePage({ searchParams }: Props) {
   }));
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-5 pb-16">
-      <PageIntro
-        eyebrow={isToday ? formatKoreanDate(today) : `${formatKoreanDate(dateKey)} 질문`}
-        title={isToday ? "오늘의 선택은?" : "지난 선택 다시 보기"}
-        description="둘 중 하나만 고를 수 있다면? 하루에 하나씩, 가볍게 골라보세요."
+    <Shop theme="stationery">
+      <ShopSign
+        width="max-w-3xl"
+        shop="오늘.zip 문방구"
+        note={isToday ? formatKoreanDate(today) : `${formatKoreanDate(dateKey)} 뽑기판`}
+        title={isToday ? "오늘의 선택" : "지난 뽑기판"}
+        description="둘 중 하나, 고르기 어렵다면 뽑기판에 맡겨보세요. 매일 판이 바뀌어요."
       />
+    <div className="mx-auto w-full max-w-3xl px-5 pb-16 pt-6 sm:pt-8">
       <BalanceGame
         question={questionForDate(dateKey)}
         dateKey={dateKey}
@@ -62,12 +66,17 @@ export default async function BalancePage({ searchParams }: Props) {
         isToday={isToday}
         past={past}
       />
+      <ShopCrossLinks current="stationery" />
       <AdSlot id="balance-bottom" className="mt-10" />
 
-      <InfoSection title="오늘의 밸런스 게임이란?">
+      <InfoSection title="오늘의 뽑기판이란?">
         <p>
-          음식, 연애, 일상, 취향, 여행, 재미 여섯 가지 주제의 밸런스 게임이 매일 한국 시간 자정에 하나씩 바뀌어요. 친구에게
-          공유해서 서로의 선택을 비교해 보세요.
+          음식, 연애, 일상, 취향, 여행, 재미 여섯 가지 주제의 밸런스 게임이 매일 한국 시간 자정에 하나씩 바뀌어요. 둘 중
+          하나를 고르기 어려울 때, 뽑기판에서 남은 칸을 하나 뜯으면 둘 중 한쪽이 나와요.
+        </p>
+        <p>
+          30칸 중 18칸은 이미 꽝으로 뜯겨 있고, 남은 12칸에 두 선택지가 반반씩 들어 있어요. 꽝 위치와 배치는 날짜마다
+          바뀌어요. 친구에게 보내서 누가 어느 쪽을 뽑았는지 비교해 보세요.
         </p>
         <p>
           내 선택은 이 기기의 브라우저에만 저장되고, 서버로 전송되지 않아요. 전체 이용자 투표 결과는 집계 기능을 준비하고
@@ -75,5 +84,6 @@ export default async function BalancePage({ searchParams }: Props) {
         </p>
       </InfoSection>
     </div>
+    </Shop>
   );
 }
