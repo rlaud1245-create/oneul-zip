@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { MapPin, Phone, X } from "lucide-react";
+import { ImageIcon, MapPin, Phone, X } from "lucide-react";
 import { StickyAction } from "@/components/ShopParts";
 import { cn } from "@/lib/cn";
 import { dayIndex } from "@/lib/kst";
@@ -67,6 +67,7 @@ export function FestivalBoard({ today, festivals, ok }: Props) {
   const [here, setHere] = useState<{ lat: number; lng: number } | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [limit, setLimit] = useState(PAGE);
+  const [posterOpen, setPosterOpen] = useState(false);
   const detailRef = useRef<HTMLDivElement>(null);
 
   const regions = useMemo(() => {
@@ -112,6 +113,7 @@ export function FestivalBoard({ today, festivals, ok }: Props) {
 
   function open(id: string) {
     setSelectedId(id);
+    setPosterOpen(false);
     requestAnimationFrame(() => detailRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }));
   }
 
@@ -237,16 +239,53 @@ export function FestivalBoard({ today, festivals, ok }: Props) {
               <a href={mapLink(selected.f)} target="_blank" rel="noopener noreferrer" className="btn-primary">
                 지도에서 보기
               </a>
+              {selected.f.image ? (
+                <button
+                  type="button"
+                  onClick={() => setPosterOpen((v) => !v)}
+                  aria-expanded={posterOpen}
+                  aria-controls="festival-poster"
+                  className={cn("btn-secondary", posterOpen && "bg-ink! text-surface!")}
+                >
+                  <ImageIcon className="size-4" aria-hidden />
+                  {posterOpen ? "포스터 접기" : "포스터 보기"}
+                </button>
+              ) : null}
               <a
                 href={`https://search.naver.com/search.naver?query=${encodeURIComponent(selected.f.title)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-secondary"
+                className="btn-ghost"
               >
                 자세히 검색
               </a>
             </div>
           </div>
+          {selected.f.image && posterOpen && (
+            <div id="festival-poster" className="border-t-2 border-dashed border-ink/40 bg-canvas px-5 pb-5 pt-4">
+              <a
+                href={selected.f.image}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mx-auto block max-w-md border-2 border-ink bg-surface"
+              >
+                {/* 공공누리 변경금지 조건을 지키기 위해 자르거나 덧씌우지 않고 원본 비율 그대로 보여줍니다. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={selected.f.image}
+                  alt={`${selected.f.title} 포스터`}
+                  loading="lazy"
+                  decoding="async"
+                  referrerPolicy="no-referrer"
+                  className="block h-auto w-full"
+                />
+              </a>
+              <p className="mx-auto mt-2 flex max-w-md justify-between gap-2 text-[13px] text-muted">
+                <span>누르면 원본을 크게 볼 수 있어요</span>
+                <span>사진: 한국관광공사</span>
+              </p>
+            </div>
+          )}
         </div>
       )}
 
@@ -309,7 +348,7 @@ export function FestivalBoard({ today, festivals, ok }: Props) {
       </div>
 
       <p className="mt-3 text-right text-[13px] text-muted">
-        축제 정보: 한국관광공사 · 일정은 바뀔 수 있으니 가기 전에 꼭 확인하세요
+        축제 정보·사진: 한국관광공사 · 일정은 바뀔 수 있으니 가기 전에 꼭 확인하세요
       </p>
 
       {list.length > 0 && (

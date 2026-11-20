@@ -25,6 +25,8 @@ export interface Festival {
   /** 위도, 경도 (없으면 null) */
   lat: number | null;
   lng: number | null;
+  /** 대표 포스터 이미지 주소 (https, 없으면 null). 원본 그대로만 보여줍니다. */
+  image: string | null;
 }
 
 export interface FestivalResult {
@@ -94,6 +96,14 @@ interface RawItem {
   mapx?: string | number;
   mapy?: string | number;
   progresstype?: string;
+  firstimage?: string;
+}
+
+function toImage(value: unknown): string | null {
+  const url = String(value ?? "").trim();
+  if (!/^https?:\/\//.test(url)) return null;
+  // https 사이트에서 막히지 않도록 http 주소는 https로 바꿔 불러옵니다.
+  return url.replace(/^http:\/\//, "https://");
 }
 
 function normalize(item: RawItem): Festival | null {
@@ -114,6 +124,7 @@ function normalize(item: RawItem): Festival | null {
     tel: String(item.tel ?? "").replace(/<[^>]*>/g, "").trim(),
     lat: toNumber(item.mapy),
     lng: toNumber(item.mapx),
+    image: toImage(item.firstimage),
   };
 }
 
@@ -170,7 +181,7 @@ async function loadFromApi(today: string): Promise<FestivalResult> {
 const memory = new Map<string, { at: number; value: FestivalResult }>();
 
 export async function festivalsFor(today: string): Promise<FestivalResult> {
-  const cacheKey = `https://cache.oneulzip.com/festivals/v1/${today}`;
+  const cacheKey = `https://cache.oneulzip.com/festivals/v2/${today}`;
   const hit = memory.get(cacheKey);
   if (hit && Date.now() - hit.at < CACHE_SECONDS * 1000) return hit.value;
 
