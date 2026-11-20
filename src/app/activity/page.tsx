@@ -26,12 +26,12 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     description: DESCRIPTION,
     alternates: { canonical: "/activity" },
     openGraph: {
-      images: ["/opengraph-image.png"],
+      images: ["/activity/opengraph-image.png"],
       title: ogTitle,
       description: ogDescription,
       url: activity ? `/activity?id=${activity.id}` : "/activity",
     },
-    twitter: { card: "summary_large_image", images: ["/twitter-image.png"], title: ogTitle, description: ogDescription },
+    twitter: { card: "summary_large_image", images: ["/activity/twitter-image.png"], title: ogTitle, description: ogDescription },
   };
 }
 

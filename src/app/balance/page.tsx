@@ -28,12 +28,12 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     description,
     alternates: { canonical: "/balance" },
     openGraph: {
-      images: ["/opengraph-image.png"],
+      images: ["/balance/opengraph-image.png"],
       title: `${q.a} vs ${q.b}`,
       description: "오늘.zip 밸런스 게임, 당신의 선택은?",
       url: isToday ? "/balance" : `/balance?date=${dateKey}`,
     },
-    twitter: { card: "summary_large_image", images: ["/twitter-image.png"], title: `${q.a} vs ${q.b}`, description: "오늘.zip 밸런스 게임, 당신의 선택은?" },
+    twitter: { card: "summary_large_image", images: ["/balance/twitter-image.png"], title: `${q.a} vs ${q.b}`, description: "오늘.zip 밸런스 게임, 당신의 선택은?" },
   };
 }
 

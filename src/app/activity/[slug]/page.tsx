@@ -23,14 +23,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: collection.description,
     alternates: { canonical: path },
     openGraph: {
-      images: ["/opengraph-image.png"],
+      images: ["/activity/opengraph-image.png"],
       title: collection.title,
       description: collection.description,
       url: path,
     },
     twitter: {
       card: "summary_large_image",
-      images: ["/twitter-image.png"],
+      images: ["/activity/twitter-image.png"],
       title: collection.title,
       description: collection.description,
     },
