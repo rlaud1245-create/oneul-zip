@@ -233,6 +233,7 @@ export function FoodPicker({ initialId }: { initialId?: string }) {
                 title="오늘.zip - 오늘 뭐 먹지?"
                 text={`오늘 메뉴는 ${food.name} ${food.emoji} 어때?`}
                 path={`/food?id=${food.id}`}
+                image={`/og/food/${food.id}.jpg`}
               />
             </div>
           </motion.article>

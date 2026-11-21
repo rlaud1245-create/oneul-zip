@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { SHOPS, shopForPath } from "@/lib/shops";
+import { VisitCounter } from "./VisitCounter";
 
 const NAV = [...SHOPS.map((s) => ({ href: s.path, label: s.menu })), { href: "/stamp", label: "도장판" }, { href: "/saved", label: "저장함" }];
 
@@ -21,9 +22,12 @@ export function Header() {
   return (
     <header data-shop={shopForPath(pathname)} className="sticky top-0 z-30 border-b-[3px] border-ink">
       <div className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between px-5">
-        <Link href="/" aria-label="오늘.zip 홈" className="rounded-lg" onClick={() => setOpen(false)}>
-          <Logo />
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href="/" aria-label="오늘.zip 홈" className="rounded-lg" onClick={() => setOpen(false)}>
+            <Logo />
+          </Link>
+          <VisitCounter />
+        </div>
 
         <nav aria-label="주요 메뉴" className="hidden sm:block">
           <ul className="flex items-center gap-1.5">

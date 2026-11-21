@@ -6,6 +6,8 @@ export const STORAGE_KEYS = {
   votes: "oneul:votes",
   zodiac: "oneul:zodiac",
   stamps: "oneul:stamps",
+  /** 오늘 손님 수를 이미 센 날짜 (하루 한 번만 세기 위해) */
+  visitDay: "oneul:visit-day",
 } as const;
 
 export const STORAGE_EVENT = "oneul-storage";
@@ -35,4 +37,13 @@ export function writeJSON(key: string, value: unknown): void {
     // 저장 공간 부족, 시크릿 모드 등: 조용히 무시하고 메모리 상태로만 동작
   }
   window.dispatchEvent(new CustomEvent(STORAGE_EVENT, { detail: key }));
+}
+
+/** 문자열 그대로 저장 (변경 알림 없이) */
+export function writeRaw(key: string, value: string): void {
+  try {
+    window.localStorage.setItem(key, value);
+  } catch {
+    // 무시
+  }
 }
