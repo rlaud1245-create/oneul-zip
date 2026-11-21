@@ -11,5 +11,13 @@
   },
   "observability": {
     "enabled": true
-  }
+  },
+  // 오늘 손님 수 (날짜별 방문자 수만 저장)
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "oneulzip",
+      "database_id": "03ec32fd-01ee-4bef-934d-f4ac736ceb84"
+    }
+  ]
 }
